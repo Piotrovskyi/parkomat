@@ -1,0 +1,17 @@
+const Sequelize = require('sequelize');
+const dbInstance = require('./db-instance');
+
+
+module.exports = dbInstance.define('parking', {
+  id: {
+    type: Sequelize.INTEGER,
+    primaryKey: true
+  },
+  userId: Sequelize.INTEGER,
+  title: Sequelize.STRING,
+  latitude: Sequelize.STRING,
+  longitude: Sequelize.STRING,
+  places: Sequelize.INTEGER,
+  price: Sequelize.INTEGER,
+  description: Sequelize.STRING
+});
