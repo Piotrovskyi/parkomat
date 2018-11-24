@@ -20,7 +20,7 @@ module.exports = {
 
     console.log('#################### 7', data);
 
-    return (!~successStatuses.indexOf(data.status)) ? data : null;
+    return (~successStatuses.indexOf(data.status)) ? data : null;
   }
 };
 
