@@ -7,9 +7,9 @@ router.get('/', function(req, res) {
 
 router.get('/:id', function(req, res) {
   const { id } = req.params;
-  User.findByPk(id).then(user => {
+  User.findById(id).then(user => {
     if (user) {
-      res.json(user)
+      res.json(user);
     } else {
       res.status(404).json({ error: 'User not found!' });
     }

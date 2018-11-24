@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const dbInstance = require('./db-instance');
-
+const { userTypes } = require('utils/constants');
 
 module.exports = dbInstance.define('user', {
   id: {
@@ -8,7 +8,13 @@ module.exports = dbInstance.define('user', {
     primaryKey: true
   },
   email: Sequelize.STRING,
-  type: Sequelize.INTEGER,
+  type: {
+    type: Sequelize.INTEGER,
+    get() {
+      return userTypes[this.getDataValue('type')];
+    },
+  },
   firstName: Sequelize.STRING,
-  lastName: Sequelize.STRING
+  lastName: Sequelize.STRING,
+  balance: Sequelize.INTEGER,
 });

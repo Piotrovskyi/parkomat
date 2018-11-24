@@ -1,9 +1,8 @@
 const Sequelize = require('sequelize');
 const dbInstance = require('./db-instance');
 
-
-module.exports = dbInstance.define('parking', {
-  id: {
+const Parking = dbInstance.define('parking', {
+    id: {
     type: Sequelize.INTEGER,
     primaryKey: true
   },
@@ -15,3 +14,5 @@ module.exports = dbInstance.define('parking', {
   price: Sequelize.INTEGER,
   description: Sequelize.STRING
 });
+
+module.exports = Parking;

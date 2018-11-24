@@ -1,4 +1,5 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const config = require('config');
 
 const app = express();
@@ -10,6 +11,9 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Headers', 'origin, content-type, accept');
   next();
 });
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 app.use(require('routes'));
 
