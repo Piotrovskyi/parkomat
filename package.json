@@ -18,6 +18,7 @@
   "homepage": "https://github.com/Piotrovskyi/parkomat#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "crypto": "^1.0.1",
     "expo-server-sdk": "^3.0.1",
     "express": "^4.16.4",
     "js-md5": "^0.7.3",
