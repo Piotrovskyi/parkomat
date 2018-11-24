@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { Deposit } = require('model');
+const { Deposit, User } = require('model');
 const { liqPay } = require('utils');
 
 router.post('/', function(req, res) {
@@ -17,7 +17,12 @@ router.post('/', function(req, res) {
 
   if(deposit) {
     Deposit
-      .update({ status: 1 }, { where: { id: deposit.id } })
+      .update({ status: 1 }, { where: { id: deposit.order_id } })
+      .then(deposit => {
+        return User
+          .findById(deposit.userId)
+          .then(user => user.update({ balance: user.balance + deposit.amount }));
+      })
       .then(() => res.sendStatus(200));
   } else {
     res.status(404).json({ error: 'Payment not found!' });
