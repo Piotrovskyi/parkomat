@@ -21,6 +21,7 @@
     "expo-server-sdk": "^3.0.1",
     "express": "^4.16.4",
     "js-md5": "^0.7.3",
+    "moment": "^2.22.2",
     "mysql2": "^1.6.4",
     "sequelize": "^4.41.2"
   },
