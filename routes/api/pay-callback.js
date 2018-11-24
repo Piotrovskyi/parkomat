@@ -1,29 +1,24 @@
 const router = require('express').Router();
 const { Deposit, User } = require('model');
-const { liqPay } = require('utils');
+const { liqPay, sendNotification } = require('utils');
 
 router.post('/', function(req, res) {
-
-  console.log('#################### 1');
-
   const { data, signature } = req.body;
 
-  console.log('#################### data 2', data);
-  console.log('####################  signature 2', signature);
-
   const deposit = liqPay.getValidPayment(data, signature);
-
-  console.log('#################### 3 deposit', deposit);
 
   if(deposit) {
     Deposit
       .update({ status: 1 }, { where: { id: deposit.order_id } })
       .then(() => Deposit.findById(deposit.order_id))
       .then(deposit => {
-        console.log();
         return User
           .findById(deposit.userId)
-          .then(user => user.update({ balance: user.balance + deposit.amount }));
+          .then(user => user.update({ balance: user.balance + deposit.amount }))
+          .then(() => {
+            const notification = `Your balance was replenished by ${deposit.amount}UAH`;
+            sendNotification(deposit.userId, notification, { type: 'add-deposit'});
+          });
       })
       .then(() => res.sendStatus(200));
   } else {
