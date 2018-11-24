@@ -8,7 +8,8 @@ router.post('/', function(req, res) {
 
   const { data, signature } = req.body;
 
-  console.log('#################### 2');
+  console.log('#################### data 2', data);
+  console.log('####################  signature 2', signature);
 
   const deposit = liqPay.getValidPayment(data, signature);
 
