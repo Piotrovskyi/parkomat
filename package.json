@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_PATH=. PORT=4000 nodemon index.js"
+    "start": "NODE_PATH=. nodemon index.js"
   },
   "repository": {
     "type": "git",
