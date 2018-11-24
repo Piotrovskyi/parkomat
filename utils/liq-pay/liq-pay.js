@@ -73,7 +73,7 @@ function LiqPay(publicKey, privateKey) {
       sandbox: sandboxMod,
       result_url: 'http://parkomat.yojji.io:3000/',
       server_url: 'http://parkomat.yojji.io:3000/api/pay-callback',
-      currency: 'UAH',
+      currency: 'USD',
       description: 'Refill Parkomat account'
     };
 
