@@ -4,7 +4,7 @@ module.exports = {
   generatePayLink: (userId, amount, depositId) => LiqPay.assemblePayURL(userId, amount, depositId),
   getValidPayment: (rawData, signature) => {
 
-    console.log('#################### 4');
+    console.log('#################### 4', JSON.parse(new Buffer(rawData, 'base64').toString()));
 
     if (!LiqPay.isValidSignature(rawData, signature)) {
       console.log('#################### 5');
