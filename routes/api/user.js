@@ -11,9 +11,7 @@ router.post('/login', function(req, res) {
       if (user) {
         const authorizationToken = md5(`${new Date().getTime()}`);
 
-        User
-          .update({ authorizationToken }, { where: { id: user.id } })
-          .then(() => res.json({ authorizationToken }));
+        user.update({ authorizationToken }).then(() => res.json({ authorizationToken }));
       } else {
         res.status(404).json({ error: 'User not found!' });
       }
@@ -22,16 +20,13 @@ router.post('/login', function(req, res) {
 
 router.post('/notificationsToken', function(req, res) {
   const { id } = req.currentUser;
-  const { token } = req.body;
+  const { token: notificationsToken } = req.body;
 
   User
     .findById(id)
     .then(user => {
       if (user) {
-        // User
-        //   .update({ notificationsToken: token }, { where: { id } })
-        //   .then(() => res.json(Object.assign(user, { notificationsToken: token })));
-        res.json({qwe: 123});
+        user.update({ notificationsToken }).then(() => res.json({ notificationsToken }));
       } else {
         res.status(404).json({ error: 'User not found!' });
       }

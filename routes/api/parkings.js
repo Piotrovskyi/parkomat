@@ -19,9 +19,17 @@ const query = {
   ]
 };
 
+const addCarsToParking = parking => {
+  parking = parking.toJSON();
+  parking.actualCars = parking.sessions.map(session => session.car);
+  delete parking.sessions;
+  return parking;
+};
+
 router.get('/', function(req, res) {
   Parking
     .findAll(query)
+    .then(parkings => parkings.map(addCarsToParking))
     .then(parkings => res.json(parkings));
 });
 
@@ -29,6 +37,7 @@ router.get('/:id', function(req, res) {
   const { id } = req.params;
   Parking
     .findById(id, query)
+    .then(parking => addCarsToParking(parking))
     .then(parking => {
       if (parking) {
         res.json(parking);
