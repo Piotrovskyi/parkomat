@@ -3,12 +3,20 @@ const LiqPay = require('./liq-pay');
 module.exports = {
   generatePayLink: (userId, amount, depositId) => LiqPay.assemblePayURL(userId, amount, depositId),
   getValidPayment: (rawData, signature) => {
+
+    console.log('#################### 4');
+
     if (!LiqPay.isValidSignature(rawData, signature)) {
+      console.log('#################### 5');
       return false;
     }
 
+    console.log('#################### 6');
+
     const data = JSON.parse(new Buffer(rawData, 'base64').toString());
     const successStatuses = ['success', 'sandbox'];
+
+    console.log('#################### 7', data);
 
     return (!~successStatuses.indexOf(data.status)) ? data : null;
   }
