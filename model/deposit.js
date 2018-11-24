@@ -4,7 +4,9 @@ const dbInstance = require('./db-instance');
 const Deposit = dbInstance.define('deposit', {
   id: {
     type: Sequelize.INTEGER,
-    primaryKey: true
+    primaryKey: true,
+    unique: true,
+    autoIncrement: true
   },
   userId: Sequelize.INTEGER,
   amount: Sequelize.INTEGER,

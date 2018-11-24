@@ -1,6 +1,22 @@
 const md5 = require('js-md5');
 const router = require('express').Router();
-const { User } = require('model');
+const { Deposit, Payment, User, Car } = require('model');
+
+router.get('/deposits', function(req, res) {
+  const { id } = req.currentUser;
+
+  Deposit
+    .findAll({ where: { userId: id } })
+    .then(deposits => res.json(deposits));
+});
+
+router.get('/payments', function(req, res) {
+  const { id } = req.currentUser;
+
+  Payment
+    .findAll({ where: { userId: id } })
+    .then(payments => res.json(payments));
+});
 
 router.post('/login', function(req, res) {
   const { login, password } = req.body;
@@ -15,6 +31,19 @@ router.post('/login', function(req, res) {
       } else {
         res.status(404).json({ error: 'User not found!' });
       }
+    });
+});
+
+router.post('/registration', function(req, res) {
+  const { login, password, carNumber } = req.body;
+
+    User.create({
+      type: 0,
+      login,
+      password
+    }).then(user => {
+      Car.create({ userId: user.get('id'), number: carNumber })
+        .then(() => res.json({}));
     });
 });
 
