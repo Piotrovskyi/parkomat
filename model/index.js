@@ -3,12 +3,14 @@ const User = require('./user');
 const Parking = require('./parking');
 const Car = require('./car');
 const Session = require('./session');
-const Setting = require('./setting');
+const Deposit = require('./deposit');
+const Payment = require('./payment');
 
 module.exports = {
   User,
   Parking,
   Car,
   Session,
-  Setting
+  Deposit,
+  Payment
 };

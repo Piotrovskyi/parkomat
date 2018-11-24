@@ -2,6 +2,8 @@ const User = require('./user');
 const Parking = require('./parking');
 const Car = require('./car');
 const Session = require('./session');
+const Deposit = require('./deposit');
+const Payment = require('./payment');
 
 // Parkings to user
 User.hasMany(Parking, {
@@ -39,5 +41,22 @@ Session.belongsTo(Car, {
   as: 'car'
 });
 
+// Deposits to user
+User.hasMany(Deposit, {
+  foreignKey: 'userId',
+  as: 'deposits'
+});
+Deposit.belongsTo(User, {
+  foreignKey: 'userId'
+});
+
+// Payments to user
+User.hasMany(Payment, {
+  foreignKey: 'userId',
+  as: 'payments'
+});
+Payment.belongsTo(User, {
+  foreignKey: 'userId'
+});
 
 //{include: [{model: Session, as: 'sessions'}]}

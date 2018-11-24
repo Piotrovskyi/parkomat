@@ -4,6 +4,8 @@ router.use('/users', require('./users'));
 router.use('/parkings', require('./parkings'));
 router.use('/cars', require('./cars'));
 router.use('/sessions', require('./sessions'));
-router.use('/settings', require('./settings'));
+router.use('/deposits', require('./deposits'));
+router.use('/payments', require('./payments'));
+router.use('/user', require('./user'));
 
 module.exports = router;

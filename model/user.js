@@ -12,9 +12,11 @@ module.exports = dbInstance.define('user', {
     type: Sequelize.INTEGER,
     get() {
       return userTypes[this.getDataValue('type')];
-    },
+    }
   },
   firstName: Sequelize.STRING,
   lastName: Sequelize.STRING,
+  authorizationToken: Sequelize.STRING,
+  notificationsToken: Sequelize.STRING,
   balance: Sequelize.INTEGER,
 });
