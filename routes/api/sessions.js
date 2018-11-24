@@ -22,12 +22,12 @@ router.get('/:id', function(req, res) {
 router.post('/', async (req, res) => {
   const { numbers, parkingId = 1 } = req.body;
   if(numbers) {
-    const numbersArray = numbers.split('/n');
+    console.log(numbers.toLowerCase().replace(/(\r\n\t|\n|\r\t)/gm,'').replace(/\s/g, ''));
     const parking = await Parking.findById(parkingId);
     const existingCar = await Car.findOne({
       include: [{ model: Session, as: 'sessions' }],
       where: {
-        number: numbersArray[0],
+        number: numbers.toLowerCase().replace(/(\r\n\t|\n|\r\t)/gm,'').replace(/\s/g, '')
       },
     });
 
@@ -65,10 +65,11 @@ router.post('/', async (req, res) => {
           amount: costRounded,
           createdAt: currentTime
         });
-        sendNotification(existingCar.userId, `You have been charged ${costRounded} for staying at ${parking.title}`, { type: 'park-end', costRounded});
+        sendNotification(existingCar.userId, `You have been charged ${costRounded} UAN for staying at ${parking.title} parking`, { type: 'park-end', costRounded});
       }
     }
   }
+  res.json({ sent: true });
 });
 
 module.exports = router;
