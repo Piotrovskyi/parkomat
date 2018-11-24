@@ -3,7 +3,7 @@ const { Deposit } = require('model');
 
 router.get('/', function(req, res) {
   Deposit
-    .findAll()
+    .findAll({ where: { status: 1 } })
     .then(deposits => res.json(deposits));
 });
 
@@ -11,7 +11,7 @@ router.get('/:id', function(req, res) {
   const { id } = req.params;
 
   Deposit
-    .findById(id)
+    .findOne({ where: { id, status: 1 } })
     .then(deposit => {
       if (deposit) {
         res.json(deposit);

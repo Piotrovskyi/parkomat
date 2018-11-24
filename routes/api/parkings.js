@@ -6,9 +6,6 @@ const query = {
     {
       model: Session,
       as: 'sessions',
-      where: {
-        closedAt: 0
-      },
       include: [
         {
           model: Car,
@@ -21,7 +18,9 @@ const query = {
 
 const addCarsToParking = parking => {
   parking = parking.toJSON();
-  parking.actualCars = parking.sessions.map(session => session.car);
+  parking.actualCars = parking.sessions
+    .filter(session => !session.closedAt)
+    .map(session => session.car);
   delete parking.sessions;
   return parking;
 };

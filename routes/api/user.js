@@ -1,12 +1,22 @@
 const md5 = require('js-md5');
+const moment = require('moment');
 const router = require('express').Router();
 const { Deposit, Payment, User, Car } = require('model');
+const { liqPay } = require('utils');
+
+router.get('/', function(req, res) {
+  const { id } = req.currentUser;
+
+  User
+    .findById(id)
+    .then(user => res.json(user));
+});
 
 router.get('/deposits', function(req, res) {
   const { id } = req.currentUser;
 
   Deposit
-    .findAll({ where: { userId: id } })
+    .findAll({ where: { userId: id, status: true } })
     .then(deposits => res.json(deposits));
 });
 
@@ -60,6 +70,20 @@ router.post('/notificationsToken', function(req, res) {
         res.status(404).json({ error: 'User not found!' });
       }
     });
+});
+
+router.post('/deposits', function(req, res) {
+  const { id } = req.currentUser;
+  const { amount } = req.body;
+
+  Deposit.create({
+    userId: id,
+    status: 0,
+    amount,
+    createdAt: moment(new Date()).unix()
+  }).then(deposit => {
+    res.json({ link: liqPay.generatePayLink(id, amount, deposit.get('id')) });
+  });
 });
 
 module.exports = router;
