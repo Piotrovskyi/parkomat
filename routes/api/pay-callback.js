@@ -18,7 +18,9 @@ router.post('/', function(req, res) {
   if(deposit) {
     Deposit
       .update({ status: 1 }, { where: { id: deposit.order_id } })
+      .then(() => Deposit.findById(deposit.order_id))
       .then(deposit => {
+        console.log();
         return User
           .findById(deposit.userId)
           .then(user => user.update({ balance: user.balance + deposit.amount }));

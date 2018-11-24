@@ -67,6 +67,8 @@ router.post('/deposits', function(req, res) {
   const { id } = req.currentUser;
   const { amount } = req.body;
 
+  console.log('##################### amount', req.body);
+
   Deposit.create({
     userId: id,
     status: 0,
