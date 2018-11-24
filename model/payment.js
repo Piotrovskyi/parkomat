@@ -4,7 +4,9 @@ const dbInstance = require('./db-instance');
 const Payment = dbInstance.define('payment', {
   id: {
     type: Sequelize.INTEGER,
-    primaryKey: true
+    primaryKey: true,
+    unique: true,
+    autoIncrement: true
   },
   userId: Sequelize.INTEGER,
   carId: Sequelize.INTEGER,

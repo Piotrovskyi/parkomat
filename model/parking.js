@@ -2,9 +2,11 @@ const Sequelize = require('sequelize');
 const dbInstance = require('./db-instance');
 
 const Parking = dbInstance.define('parking', {
-    id: {
+  id: {
     type: Sequelize.INTEGER,
-    primaryKey: true
+    primaryKey: true,
+    unique: true,
+    autoIncrement: true
   },
   userId: Sequelize.INTEGER,
   title: Sequelize.STRING,

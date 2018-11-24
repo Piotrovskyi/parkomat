@@ -1,11 +1,7 @@
 const router = require('express').Router();
 const { Car } = require('model');
 
-const { sendNotification } = require('utils');
-
 router.get('/', function(req, res) {
-  sendNotification(2, 'test message', { qwe: 'rty' });
-
   Car.findAll().then(cars => res.json(cars));
 });
 

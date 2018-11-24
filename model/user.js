@@ -5,9 +5,13 @@ const { userTypes } = require('utils/constants');
 module.exports = dbInstance.define('user', {
   id: {
     type: Sequelize.INTEGER,
-    primaryKey: true
+    primaryKey: true,
+    unique: true,
+    autoIncrement: true
   },
   email: Sequelize.STRING,
+  login: Sequelize.STRING,
+  password: Sequelize.STRING,
   type: {
     type: Sequelize.INTEGER,
     get() {

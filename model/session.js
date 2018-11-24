@@ -2,9 +2,11 @@ const Sequelize = require('sequelize');
 const dbInstance = require('./db-instance');
 
 const Session = dbInstance.define('session', {
-    id: {
+  id: {
     type: Sequelize.INTEGER,
-    primaryKey: true
+    primaryKey: true,
+    unique: true,
+    autoIncrement: true
   },
   carId: Sequelize.INTEGER,
   parkingId: Sequelize.INTEGER,
