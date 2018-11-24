@@ -16,8 +16,8 @@ router.post('/', function(req, res) {
           .findById(deposit.userId)
           .then(user => user.update({ balance: user.balance + deposit.amount }))
           .then(() => {
-            const notification = `Your balance was replenished by ${deposit.amount}UAH`;
-            sendNotification(deposit.userId, notification, { type: 'add-deposit'});
+            const notification = `Your balance was replenished by ${deposit.amount} UAH`;
+            sendNotification(deposit.userId, notification, {type: 'add-deposit', amount: deposit.amount});
           });
       })
       .then(() => res.sendStatus(200));

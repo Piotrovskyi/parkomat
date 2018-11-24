@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { Session, Car, Parking, User } = require('model');
+const { Session, Car, Parking, User, Payment } = require('model');
 const moment = require('moment');
 const getTimeOffset = require('../../utils/get-time-offset');
 const sendNotification = require('../../utils/send-notification');
@@ -32,7 +32,7 @@ router.post('/', async (req, res) => {
     });
 
     if(!existingCar) {
-      console.log('Car does not exist')
+      console.log('Car does not exist');
       return;
     }
 
@@ -44,7 +44,7 @@ router.post('/', async (req, res) => {
         openedAt: currentTime,
         parkingId,
       });
-      sendNotification(existingCar.userId, `You have parked at ${parking.title} parking`, { type: 'park-start'})
+      sendNotification(existingCar.userId, `You have parked at ${parking.title} parking`, { type: 'park-start'});
     } else if(lastSession && !lastSession.closedAt) {
       const offset = getTimeOffset(lastSession.openedAt, currentTime);
       const timeoutMinutes = 1;
@@ -58,7 +58,14 @@ router.post('/', async (req, res) => {
         }, { where: { id: lastSession.id }});
         const user = await User.findById(existingCar.userId);
         await user.update({ balance: user.balance - costRounded });
-        sendNotification(existingCar.userId, `You have been charged ${costRounded} for staying at ${parking.title}`, { type: 'park-end', costRounded})
+        await Payment.create({
+          userId: user.id,
+          carId: existingCar.id,
+          parkingId: parking.id,
+          amount: costRounded,
+          createdAt: currentTime
+        });
+        sendNotification(existingCar.userId, `You have been charged ${costRounded} for staying at ${parking.title}`, { type: 'park-end', costRounded});
       }
     }
   }
