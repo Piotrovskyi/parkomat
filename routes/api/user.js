@@ -9,6 +9,13 @@ router.get('/', function(req, res) {
 
   User
     .findById(id)
+    .then(user => {
+      user = user.toJSON();
+
+      return Deposit
+        .findOne({ where: { userId: user.id }, order: [['createdAt', 'DESC']] })
+        .then(deposit => Object.assign({}, user, { lastDeposit: deposit.toJSON() }));
+    })
     .then(user => res.json(user));
 });
 
