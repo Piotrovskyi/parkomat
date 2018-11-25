@@ -43,13 +43,27 @@ router.post('/', async (req, res) => {
     const lastSession = existingCar.sessions[existingCar.sessions.length - 1];
     const currentTime = moment(new Date()).unix();
     if(!lastSession || (lastSession && lastSession.closedAt)) {
-      await Session.create({
-        carId: existingCar.id,
-        openedAt: currentTime,
-        parkingId,
-      });
-      setParkingGreenStatus();
-      sendNotification(existingCar.userId, `You have parked at ${parking.title}`, { type: 'park-start'});
+
+      if(!lastSession) {
+        await Session.create({
+          carId: existingCar.id,
+          openedAt: currentTime,
+          parkingId,
+        });
+        setParkingGreenStatus();
+        sendNotification(existingCar.userId, `You have parked at ${parking.title}`, { type: 'park-start'});
+      } else if(lastSession && lastSession.closedAt) {
+        const justWasOffset = getTimeOffset(lastSession.closedAt, currentTime);
+        if(justWasOffset >= 1) {
+          await Session.create({
+            carId: existingCar.id,
+            openedAt: currentTime,
+            parkingId,
+          });
+          setParkingGreenStatus();
+          sendNotification(existingCar.userId, `You have parked at ${parking.title}`, { type: 'park-start'});
+        }
+      }
     } else if(lastSession && !lastSession.closedAt) {
       const offset = getTimeOffset(lastSession.openedAt, currentTime);
       console.log(offset, lastSession.openedAt, currentTime, 'offset======>>>');
