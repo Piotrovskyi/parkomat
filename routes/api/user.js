@@ -14,7 +14,7 @@ router.get('/', function(req, res) {
 
       return Deposit
         .findOne({ where: { userId: user.id }, order: [['createdAt', 'DESC']] })
-        .then(deposit => Object.assign({}, user, { lastDeposit: deposit.toJSON() }));
+        .then(deposit => Object.assign({}, user, { lastDeposit: deposit ? deposit.toJSON() : null }));
     })
     .then(user => res.json(user));
 });
