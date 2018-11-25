@@ -53,13 +53,16 @@ router.post('/login', function(req, res) {
 
 router.post('/registration', function(req, res) {
   const { login, password, carNumber } = req.body;
+  const safeCarNumber = carNumber.toLowerCase()
+    .replace(/(\r\n\t|\n|\r\t)/gm,'')
+    .replace(/\s/g, '');
 
     User.create({
       type: 0,
       login,
       password
     }).then(user => {
-      Car.create({ userId: user.get('id'), number: carNumber })
+      Car.create({ userId: user.get('id'), number: safeCarNumber })
         .then(() => res.json({}));
     });
 });

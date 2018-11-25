@@ -1,9 +1,9 @@
 const router = require('express').Router();
 const { Session, Car, Parking, User, Payment } = require('model');
 const moment = require('moment');
+const { setParkingGreenStatus } = require('utils');
 const getTimeOffset = require('../../utils/get-time-offset');
 const sendNotification = require('../../utils/send-notification');
-const socket = require('../../utils/socket-connection')
 
 router.get('/', function(req, res) {
   Session.findAll({include: [{model: Car, as: 'car'}]}).then(sessions => res.json(sessions));
@@ -48,7 +48,7 @@ router.post('/', async (req, res) => {
         openedAt: currentTime,
         parkingId,
       });
-      socket().emit('green');
+      setParkingGreenStatus();
       sendNotification(existingCar.userId, `You have parked at ${parking.title}`, { type: 'park-start'});
     } else if(lastSession && !lastSession.closedAt) {
       const offset = getTimeOffset(lastSession.openedAt, currentTime);
@@ -71,6 +71,7 @@ router.post('/', async (req, res) => {
           amount: costRounded,
           createdAt: currentTime
         });
+        setParkingGreenStatus();
         sendNotification(existingCar.userId, `You have been charged ${costRounded} UAH for staying at ${parking.title}`, { type: 'park-end', costRounded});
       }
     }
