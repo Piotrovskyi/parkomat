@@ -59,4 +59,13 @@ Payment.belongsTo(User, {
   foreignKey: 'userId'
 });
 
+// Payments to parking
+Parking.hasMany(Payment, {
+  foreignKey: 'parkingId',
+  as: 'payments'
+});
+Payment.belongsTo(Parking, {
+  foreignKey: 'parkingId'
+});
+
 //{include: [{model: Session, as: 'sessions'}]}

@@ -1,7 +1,7 @@
 const md5 = require('js-md5');
 const moment = require('moment');
 const router = require('express').Router();
-const { Deposit, Payment, User, Car } = require('model');
+const { Deposit, Payment, User, Car, Parking } = require('model');
 const { liqPay } = require('utils');
 
 router.get('/', function(req, res) {
@@ -31,7 +31,7 @@ router.get('/payments', function(req, res) {
   const { id } = req.currentUser;
 
   Payment
-    .findAll({ where: { userId: id } })
+    .findAll({ where: { userId: id }, include: [{model: Parking, as: 'parking'}] })
     .then(payments => res.json(payments));
 });
 
