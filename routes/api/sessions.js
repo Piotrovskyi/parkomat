@@ -28,13 +28,16 @@ router.post('/', async (req, res) => {
     const existingCar = await Car.findOne({
       include: [{ model: Session, as: 'sessions' }],
       where: {
-        number: numbers.toLowerCase().replace(/(\r\n\t|\n|\r\t)/gm,'').replace(/\s/g, '')
+        number: numbers.toLowerCase()
+        .replace(/(\r\n\t|\n|\r\t)/gm,'')
+        .replace(/\s/g, '')
+        .split('UA').join(''),
       },
     });
 
     if(!existingCar) {
       console.log('Car does not exist');
-      return;
+      return res.json();
     }
 
     const lastSession = existingCar.sessions[existingCar.sessions.length - 1];
@@ -46,11 +49,12 @@ router.post('/', async (req, res) => {
         parkingId,
       });
       socket().emit('green');
-      sendNotification(existingCar.userId, `You have parked at ${parking.title} parking`, { type: 'park-start'});
+      sendNotification(existingCar.userId, `You have parked at ${parking.title}`, { type: 'park-start'});
     } else if(lastSession && !lastSession.closedAt) {
       const offset = getTimeOffset(lastSession.openedAt, currentTime);
+      console.log(offset, lastSession.openedAt, currentTime, 'offset======>>>');
       const timeoutMinutes = 1;
-      if(offset > timeoutMinutes) {
+      if(offset >= timeoutMinutes) {
         const cost = (parking.price / 60) * offset;
         const costRounded = Math.round(cost);
         await Session.update({
@@ -67,7 +71,7 @@ router.post('/', async (req, res) => {
           amount: costRounded,
           createdAt: currentTime
         });
-        sendNotification(existingCar.userId, `You have been charged ${costRounded} UAH for staying at ${parking.title} parking`, { type: 'park-end', costRounded});
+        sendNotification(existingCar.userId, `You have been charged ${costRounded} UAH for staying at ${parking.title}`, { type: 'park-end', costRounded});
       }
     }
   }
