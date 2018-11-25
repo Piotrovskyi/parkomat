@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const { Parking, Session, Car } = require('model');
+const { addCarsToParking, addDistanceToParking } = require('utils');
 
 const query = {
   include: [
@@ -16,19 +17,20 @@ const query = {
   ]
 };
 
-const addCarsToParking = parking => {
-  parking = parking.toJSON();
-  parking.actualCars = parking.sessions
-    .filter(session => !session.closedAt)
-    .map(session => session.car);
-  delete parking.sessions;
-  return parking;
-};
-
 router.get('/', function(req, res) {
   Parking
     .findAll(query)
     .then(parkings => parkings.map(addCarsToParking))
+    .then(parkings => res.json(parkings));
+});
+
+router.get('/:location', function(req, res) {
+  const { location } = req.params;
+
+  Parking
+    .findAll(query)
+    .then(parkings => parkings.map(addCarsToParking))
+    .then(parkings => parkings.map(addDistanceToParking.bind(null, location)))
     .then(parkings => res.json(parkings));
 });
 
