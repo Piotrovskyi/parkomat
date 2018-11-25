@@ -8,6 +8,7 @@ router.get('/', function(req, res) {
 
 router.get('/set-green-status', function(req, res) {
   setParkingGreenStatus();
+  res.json({ success: true });
 });
 
 router.get('/:id', function(req, res) {
