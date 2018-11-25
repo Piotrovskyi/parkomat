@@ -1,4 +1,5 @@
 const express = require('express');
+const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const config = require('config');
 const { setUserToRequest } = require('utils');
@@ -12,6 +13,8 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Headers', 'origin, content-type, accept');
   next();
 });
+
+app.use(morgan('dev'));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
