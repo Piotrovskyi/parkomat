@@ -8,7 +8,7 @@ router.get('/', function(req, res) {
   const { id } = req.currentUser;
 
   User
-    .findById(id)
+    .findById(id, {include: [{model: Car, as: 'cars'}]})
     .then(user => {
       user = user.toJSON();
 
