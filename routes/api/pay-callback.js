@@ -20,8 +20,8 @@ router.post('/', function(req, res) {
             return user.update({ balance: newBalance });
           })
           .then(() => {
-            const notification = `Your balance was replenished by ${newBalance} UAH`;
-            sendNotification(deposit.userId, notification, {type: 'add-deposit', amount: deposit.amount});
+            const notification = `Your balance was replenished by ${deposit.amount} UAH`;
+            sendNotification(deposit.userId, notification, {type: 'add-deposit', amount: newBalance});
           });
       })
       .then(() => res.sendStatus(200));
