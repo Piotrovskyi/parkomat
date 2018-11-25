@@ -63,7 +63,8 @@ router.post('/', async (req, res) => {
           paid: true,
         }, { where: { id: lastSession.id }});
         const user = await User.findById(existingCar.userId);
-        await user.update({ balance: user.balance - costRounded });
+        const newBalance = user.balance - costRounded;
+        await user.update({ balance: newBalance });
         await Payment.create({
           userId: user.id,
           carId: existingCar.id,
@@ -72,7 +73,11 @@ router.post('/', async (req, res) => {
           createdAt: currentTime
         });
         setParkingGreenStatus();
-        sendNotification(existingCar.userId, `You have been charged ${costRounded} UAH for staying at ${parking.title}`, { type: 'park-end', costRounded});
+        sendNotification(
+          existingCar.userId,
+          `You have been charged ${costRounded} UAH for staying at ${parking.title}`,
+          { type: 'park-end', costRounded, newBalance }
+        );
       }
     }
   }
